@@ -117,7 +117,7 @@
             80%      { transform: translateY(-3px) rotate(0.5deg); }
         }
 
-        /* ========== الفيديو الافتتاحي - أكبر ========== */
+        /* ========== الفيديو الافتتاحي - يملأ الشاشة ========== */
         .video-intro-wrapper {
             position: relative;
             margin: 10px -5px 12px;
@@ -142,8 +142,8 @@
             object-fit: cover;
             background: #000;
             cursor: pointer;
-            min-height: 300px;
-            max-height: 500px;
+            min-height: 70vh;
+            max-height: 85vh;
         }
 
         /* رسالة انتظار */
@@ -340,8 +340,8 @@
                 width: calc(100% + 6px);
             }
             .video-intro-wrapper video {
-                min-height: 220px;
-                max-height: 320px;
+                min-height: 60vh;
+                max-height: 75vh;
             }
             .cake-gif { width: 75px; }
             .greeting-text { font-size: 1.05em; }
@@ -353,8 +353,8 @@
 
         @media screen and (min-width: 401px) and (max-width: 600px) {
             .video-intro-wrapper video {
-                min-height: 260px;
-                max-height: 380px;
+                min-height: 65vh;
+                max-height: 80vh;
             }
         }
 
@@ -369,8 +369,8 @@
                 width: calc(100% + 16px);
             }
             .video-intro-wrapper video {
-                min-height: 450px;
-                max-height: 500px;
+                min-height: 70vh;
+                max-height: 80vh;
             }
             .cake-gif { width: 120px; }
             .greeting-text { font-size: 1.4em; }
@@ -378,8 +378,8 @@
 
         @media screen and (min-width: 1024px) {
             .video-intro-wrapper video {
-                min-height: 380px;
-                max-height: 520px;
+                min-height: 70vh;
+                max-height: 80vh;
             }
         }
 
@@ -390,8 +390,8 @@
             }
             .card { margin: 8px 0; }
             .video-intro-wrapper video {
-                min-height: 200px;
-                max-height: 280px;
+                min-height: 50vh;
+                max-height: 65vh;
             }
         }
     </style>
@@ -692,7 +692,6 @@
 
             const introVideo = document.getElementById('introVideo');
             
-            // محاولة تشغيل الفيديو بالصوت
             introVideo.muted = false;
             introVideo.volume = 1.0;
             
@@ -700,7 +699,6 @@
                 videoSoundUnlocked = true;
                 document.getElementById('soundHint').style.display = 'none';
             }).catch(() => {
-                // لو منع الصوت، نشغل بدون صوت ونطلب التفاعل
                 introVideo.muted = true;
                 introVideo.play().then(() => {
                     document.getElementById('soundHint').textContent = '🔇 اضغط على الفيديو لتشغيل الصوت';
@@ -709,10 +707,8 @@
                 });
             });
 
-            // عند النقر على الفيديو
             introVideo.addEventListener('click', unlockVideoSound);
             
-            // عند أول نقرة على الصفحة
             document.addEventListener('click', function firstClick() {
                 unlockVideoSound();
                 document.removeEventListener('click', firstClick);
@@ -723,12 +719,10 @@
                 document.removeEventListener('touchstart', firstTouch);
             }, { once: true });
 
-            // بعد 27 ثانية
             setTimeout(() => {
                 startSlideshow();
             }, SETTINGS.videoDuration * 1000);
 
-            // لو الفيديو خلص قبل 27 ثانية
             introVideo.addEventListener('ended', () => {
                 startSlideshow();
             });
