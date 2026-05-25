@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 عيد ميلاد سعاد - Souad Birthday</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            background: url('background.gif') no-repeat center center fixed;
+            background-size: cover;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        /* ========== المفرقعات ========== */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: -30px;
+            animation: confettiFall linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0%   { transform: translateY(-10vh) rotate(0deg) scale(1); opacity: 1; }
+            10%  { transform: translateY(10vh) rotate(45deg) scale(0.9); opacity: 0.95; }
+            25%  { transform: translateY(25vh) rotate(90deg) scale(1.1) translateX(30px); opacity: 0.9; }
+            40%  { transform: translateY(40vh) rotate(150deg) scale(0.7) translateX(-20px); opacity: 0.85; }
+            60%  { transform: translateY(60vh) rotate(210deg) scale(1) translateX(15px); opacity: 0.7; }
+            75%  { transform: translateY(75vh) rotate(280deg) scale(0.6); opacity: 0.5; }
+            100% { transform: translateY(110vh) rotate(360deg) scale(0.2); opacity: 0; }
+        }
+
+        .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffd700, transparent);
+            animation: sparkleFloat 2.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% { transform: translate(0, 0) scale(0); opacity: 0; }
+            30%      { transform: translate(15px, -30px) scale(1.3); opacity: 1; }
+            70%      { transform: translate(-10px, -50px) scale(0.6); opacity: 0.4; }
+        }
+
+        /* ========== الكرت ========== */
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 22px;
+            padding: 18px 14px 22px;
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.35),
+                0 0 0 3px rgba(255,255,255,0.25);
+            text-align: center;
+            z-index: 10;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.4);
+            margin: 15px 0;
+            transition: all 0.5s ease;
+        }
+
+        /* ========== كعكة ========== */
+        .cake-scene {
+            display: inline-block;
+            animation: cakeFloat 2.5s ease-in-out infinite;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cake-gif {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.25));
+        }
+
+        @keyframes cakeFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            20%      { transform: translateY(-20px) rotate(-2deg); }
+            40%      { transform: translateY(-5px) rotate(1deg); }
+            60%      { transform: translateY(-16px) rotate(-1deg); }
+            80%      { transform: translateY(-3px) rotate(0.5deg); }
+        }
+
+        /* ========== الفيديو الافتتاحي - أكبر ========== */
+        .video-intro-wrapper {
+            position: relative;
+            margin: 10px -5px 12px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 
+                0 12px 25px rgba(0,0,0,0.3),
+                0 0 0 2px rgba(255,255,255,0.4);
+            animation: fadeInUp 0.8s ease;
+            width: calc(100% + 10px);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .video-intro-wrapper video {
+            width: 100%;
+            display: block;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            background: #000;
+            cursor: pointer;
+            min-height: 300px;
+            max-height: 500px;
+        }
+
+        /* رسالة انتظار */
+        .waiting-msg {
+            font-size: 0.8em;
+            color: #999;
+            margin: 5px 0;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%,100% { opacity: 0.5; }
+            50%     { opacity: 1; }
+        }
+
+        /* تنبيه الصوت */
+        .video-sound-hint {
+            font-size: 0.7em;
+            color: #e74c3c;
+            margin: 2px 0 8px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        /* ========== قسم الصور (مخفي أولاً) ========== */
+        .slideshow-section {
+            display: none;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .slideshow-section.show {
+            display: block;
+        }
+
+        .slideshow-wrapper {
+            position: relative;
+            margin: 10px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.2),
+                0 0 0 2px rgba(255,255,255,0.35);
+        }
+
+        .slideshow-wrapper img {
+            width: 100%;
+            display: block;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+        }
+
+        /* ========== نص التهنئة ========== */
+        .greeting-box {
+            background: linear-gradient(135deg, rgba(106,5,114,0.06), rgba(214,51,132,0.06));
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin: 12px 0 10px;
+            border: 1px solid rgba(106,5,114,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .greeting-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 40%,
+                rgba(255,215,0,0.08) 50%,
+                transparent 60%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%   { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .greeting-text {
+            font-size: 1.25em;
+            font-weight: bold;
+            color: #4a0e4e;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 3px rgba(255,215,0,0.15); }
+            to   { text-shadow: 0 0 15px rgba(255,215,0,0.4), 0 0 25px rgba(255,215,0,0.15); }
+        }
+
+        .lang-label {
+            display: inline-block;
+            font-size: 0.6em;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+            font-weight: normal;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lang-label.ar { background: #27ae60; color: white; }
+        .lang-label.en { background: #2980b9; color: white; }
+        .lang-label.fr { background: #c0392b; color: white; }
+
+        /* ========== نقاط ========== */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin: 3px 0 5px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #d4c5d6;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            border: 1.5px solid transparent;
+        }
+
+        .dot.active {
+            background: #6a0572;
+            transform: scale(1.5);
+            box-shadow: 0 0 10px rgba(106,5,114,0.5);
+            border-color: rgba(255,215,0,0.4);
+        }
+
+        .image-counter {
+            font-size: 0.65em;
+            color: #aaa;
+            margin-bottom: 3px;
+            letter-spacing: 0.8px;
+        }
+
+        /* ========== زر الموسيقى ========== */
+        .music-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 3px;
+            box-shadow: 0 4px 15px rgba(231,76,60,0.25);
+            position: relative;
+            z-index: 2;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-btn.playing {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            box-shadow: 0 4px 15px rgba(39,174,96,0.35);
+            animation: pulseBtn 2s infinite;
+        }
+
+        @keyframes pulseBtn {
+            0%,100% { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+            50%     { box-shadow: 0 8px 25px rgba(39,174,96,0.6); }
+        }
+
+        /* ========== تجاوب مع الشاشات ========== */
+        @media screen and (max-width: 400px) {
+            .card {
+                padding: 12px 8px 16px;
+                border-radius: 18px;
+                width: 94%;
+                max-width: 100%;
+            }
+            .video-intro-wrapper {
+                margin: 8px -3px 10px;
+                width: calc(100% + 6px);
+            }
+            .video-intro-wrapper video {
+                min-height: 220px;
+                max-height: 320px;
+            }
+            .cake-gif { width: 75px; }
+            .greeting-text { font-size: 1.05em; }
+            .greeting-box { padding: 8px 8px; }
+            .music-btn { padding: 8px 16px; font-size: 0.75em; }
+            .dot { width: 7px; height: 7px; }
+            .lang-label { font-size: 0.55em; }
+        }
+
+        @media screen and (min-width: 401px) and (max-width: 600px) {
+            .video-intro-wrapper video {
+                min-height: 260px;
+                max-height: 380px;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .card {
+                max-width: 550px;
+                padding: 24px 20px 28px;
+                border-radius: 25px;
+            }
+            .video-intro-wrapper {
+                margin: 12px -8px 14px;
+                width: calc(100% + 16px);
+            }
+            .video-intro-wrapper video {
+                min-height: 450px;
+                max-height: 500px;
+            }
+            .cake-gif { width: 120px; }
+            .greeting-text { font-size: 1.4em; }
+        }
+
+        @media screen and (min-width: 1024px) {
+            .video-intro-wrapper video {
+                min-height: 380px;
+                max-height: 520px;
+            }
+        }
+
+        @media screen and (max-height: 650px) {
+            body {
+                align-items: flex-start;
+                padding: 10px 0;
+            }
+            .card { margin: 8px 0; }
+            .video-intro-wrapper video {
+                min-height: 200px;
+                max-height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- مفرقعات -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- الكرت -->
+    <div class="card" id="mainCard">
+        <!-- كعكة -->
+        <div class="cake-scene">
+            <img src="cake.gif" alt="🎂" class="cake-gif" onerror="this.style.display='none'">
+        </div>
+
+        <!-- 🎬 الفيديو الافتتاحي -->
+        <div class="video-intro-wrapper" id="videoIntroWrapper">
+            <video id="introVideo" playsinline preload="auto">
+                <source src="intro.mp4" type="video/mp4">
+                متصفحك لا يدعم الفيديو
+            </video>
+        </div>
+
+        <!-- رسالة انتظار -->
+        <p class="waiting-msg" id="waitingMsg">🎬 شاهد الفيديو... <span id="countdownTimer"></span></p>
+        <p class="video-sound-hint" id="soundHint">🔊 تأكد من رفع صوت الجهاز</p>
+
+        <!-- ⬇️ قسم الصور (مخفي أولاً) -->
+        <div class="slideshow-section" id="slideshowSection">
+            <div class="slideshow-wrapper" id="slideshowWrapper">
+                <img src="" alt="صورة" id="slideImage">
+            </div>
+            <div class="dots-container" id="dotsContainer"></div>
+            <p class="image-counter" id="imageCounter"></p>
+        </div>
+
+        <!-- تهنئة -->
+        <div class="greeting-box">
+            <div class="greeting-text" id="greetingText"></div>
+            <span class="lang-label" id="langLabel"></span>
+        </div>
+
+        <!-- موسيقى -->
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 تشغيل الموسيقى</button>
+
+        <!-- مشغل الصوت -->
+        <audio id="audioPlayer" loop preload="auto">
+            <source src="" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        // ====================================================
+        //                الإعدادات
+        // ====================================================
+        const SETTINGS = {
+            personName: "سعاد",
+            backgroundGif: "background.gif",
+            cakeGif: "cake.gif",
+
+            // 🎬 الفيديو الافتتاحي (27 ثانية)
+            introVideo: "intro.mp4",
+            videoDuration: 27,
+
+            // 🖼️ الصور
+            photos: [
+                "photo1.jpg",
+                "photo2.jpg",
+                "photo3.jpg",
+                "photo4.jpg",
+                "photo5.jpg",
+                "photo6.jpg"
+            ],
+
+            slideInterval: 5000,
+            musicFile: "music.mp3"
+        };
+        // ====================================================
+
+        const languageData = [
+            {
+                lang: 'ar',
+                label: '🇸🇦 العربية',
+                text: `🎂 عيد ميلاد سعيد يا ${SETTINGS.personName} !<br>كل عام وأنتِ بألف خير 🎉💐`
+            },
+            {
+                lang: 'en',
+                label: '🇬🇧 English',
+                text: `🎂 Happy Birthday ${SETTINGS.personName} !<br>Wishing you all the best 🎉💐`
+            },
+            {
+                lang: 'fr',
+                label: '🇫🇷 Français',
+                text: `🎂 Joyeux Anniversaire ${SETTINGS.personName} !<br>Que tous tes vœux se réalisent 🎉💐`
+            }
+        ];
+
+        let musicPlaying = false;
+        let currentSlide = 0;
+        let slideTimer = null;
+        let slideshowStarted = false;
+        let videoSoundUnlocked = false;
+
+        // --- مفرقعات ---
+        function makeConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const shapes = ['●','■','▲','★','♦','❤','🎉','✨','🌟','💫','🎀','🌸','💎','🎈','💝'];
+            const colors = [
+                '#ff6b6b','#feca57','#ff9ff3','#54a0ff','#5f27cd',
+                '#1dd1a1','#f368e0','#ff6348','#ffc312','#12CBC4',
+                '#ED4C67','#F79F1F','#A3CB38','#1289A7','#D980FA',
+                '#FFC0CB','#FFD700','#00CED1','#FF4500','#7B68EE'
+            ];
+
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.fontSize = (8 + Math.random() * 20) + 'px';
+                piece.style.color = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (3 + Math.random() * 8) + 's';
+                piece.style.animationDelay = Math.random() * 10 + 's';
+                piece.style.opacity = 0.6 + Math.random() * 0.4;
+                container.appendChild(piece);
+            }
+        }
+
+        function makeSparkles() {
+            const container = document.getElementById('confettiContainer');
+            for (let i = 0; i < 30; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'sparkle';
+                spark.style.left = Math.random() * 100 + '%';
+                spark.style.top = Math.random() * 100 + '%';
+                spark.style.width = (3 + Math.random() * 6) + 'px';
+                spark.style.height = spark.style.width;
+                spark.style.animationDelay = Math.random() * 4 + 's';
+                spark.style.animationDuration = (1.5 + Math.random() * 3.5) + 's';
+                container.appendChild(spark);
+            }
+        }
+
+        // --- نقاط ---
+        function createDots() {
+            const dotsContainer = document.getElementById('dotsContainer');
+            dotsContainer.innerHTML = '';
+            SETTINGS.photos.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (index === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function getLangData(slideIndex) {
+            return languageData[slideIndex % languageData.length];
+        }
+
+        function updateSlide() {
+            const slideImage = document.getElementById('slideImage');
+            const langData = getLangData(currentSlide);
+
+            slideImage.style.opacity = '0';
+            slideImage.style.transform = 'scale(1.04)';
+
+            setTimeout(() => {
+                slideImage.src = SETTINGS.photos[currentSlide];
+                slideImage.onerror = function() {
+                    this.src = `https://via.placeholder.com/400x300/FF69B4/FFFFFF?text=${encodeURIComponent(SETTINGS.personName + ' ' + (currentSlide + 1))}`;
+                };
+                slideImage.style.opacity = '1';
+                slideImage.style.transform = 'scale(1)';
+            }, 350);
+
+            document.getElementById('greetingText').innerHTML = langData.text;
+
+            const langLabel = document.getElementById('langLabel');
+            langLabel.textContent = langData.label;
+            langLabel.className = 'lang-label ' + langData.lang;
+
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+
+            document.getElementById('imageCounter').textContent =
+                `📷 ${currentSlide + 1} / ${SETTINGS.photos.length}`;
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlide();
+            resetTimer();
+        }
+
+        function resetTimer() {
+            if (slideTimer) clearInterval(slideTimer);
+            slideTimer = setInterval(nextSlide, SETTINGS.slideInterval);
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % SETTINGS.photos.length;
+            updateSlide();
+        }
+
+        // --- بدء عرض الصور ---
+        function startSlideshow() {
+            if (slideshowStarted) return;
+            slideshowStarted = true;
+
+            document.getElementById('videoIntroWrapper').style.display = 'none';
+            document.getElementById('waitingMsg').style.display = 'none';
+            document.getElementById('soundHint').style.display = 'none';
+
+            const section = document.getElementById('slideshowSection');
+            section.classList.add('show');
+
+            currentSlide = 0;
+            createDots();
+            updateSlide();
+            resetTimer();
+
+            playMusic();
+        }
+
+        // --- 🎵 موسيقى ---
+        function playMusic() {
+            const audio = document.getElementById('audioPlayer');
+            const btn = document.getElementById('musicBtn');
+
+            audio.querySelector('source').src = SETTINGS.musicFile;
+            audio.load();
+
+            audio.play().then(() => {
+                musicPlaying = true;
+                btn.textContent = '🔊 إيقاف';
+                btn.classList.add('playing');
+            }).catch(() => {
+                btn.textContent = '🎵 تشغيل الموسيقى';
+            });
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('audioPlayer');
+            const btn = document.getElementById('musicBtn');
+
+            if (musicPlaying) {
+                audio.pause();
+                btn.textContent = '🎵 تشغيل الموسيقى';
+                btn.classList.remove('playing');
+            } else {
+                audio.play().then(() => {
+                    btn.textContent = '🔊 إيقاف';
+                    btn.classList.add('playing');
+                }).catch(() => {});
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // --- ⏱️ عد تنازلي ---
+        function startCountdown() {
+            let remaining = SETTINGS.videoDuration;
+            const countdownEl = document.getElementById('countdownTimer');
+
+            const updateCountdown = () => {
+                if (remaining <= 0 || slideshowStarted) {
+                    countdownEl.textContent = '';
+                    return;
+                }
+                countdownEl.textContent = `⏱️ ${remaining} ثانية`;
+                remaining--;
+                setTimeout(updateCountdown, 1000);
+            };
+
+            updateCountdown();
+        }
+
+        // --- 🔊 تفعيل صوت الفيديو ---
+        function unlockVideoSound() {
+            if (videoSoundUnlocked) return;
+            const video = document.getElementById('introVideo');
+            
+            video.muted = false;
+            video.volume = 1.0;
+            
+            video.play().then(() => {
+                videoSoundUnlocked = true;
+                document.getElementById('soundHint').style.display = 'none';
+            }).catch(() => {});
+        }
+
+        // --- 🚀 بدء التشغيل ---
+        window.onload = function() {
+            makeConfetti();
+            makeSparkles();
+            startCountdown();
+
+            const introVideo = document.getElementById('introVideo');
+            
+            // محاولة تشغيل الفيديو بالصوت
+            introVideo.muted = false;
+            introVideo.volume = 1.0;
+            
+            introVideo.play().then(() => {
+                videoSoundUnlocked = true;
+                document.getElementById('soundHint').style.display = 'none';
+            }).catch(() => {
+                // لو منع الصوت، نشغل بدون صوت ونطلب التفاعل
+                introVideo.muted = true;
+                introVideo.play().then(() => {
+                    document.getElementById('soundHint').textContent = '🔇 اضغط على الفيديو لتشغيل الصوت';
+                }).catch(() => {
+                    document.getElementById('waitingMsg').textContent = '👆 اضغط على الفيديو للمشاهدة';
+                });
+            });
+
+            // عند النقر على الفيديو
+            introVideo.addEventListener('click', unlockVideoSound);
+            
+            // عند أول نقرة على الصفحة
+            document.addEventListener('click', function firstClick() {
+                unlockVideoSound();
+                document.removeEventListener('click', firstClick);
+            }, { once: true });
+            
+            document.addEventListener('touchstart', function firstTouch() {
+                unlockVideoSound();
+                document.removeEventListener('touchstart', firstTouch);
+            }, { once: true });
+
+            // بعد 27 ثانية
+            setTimeout(() => {
+                startSlideshow();
+            }, SETTINGS.videoDuration * 1000);
+
+            // لو الفيديو خلص قبل 27 ثانية
+            introVideo.addEventListener('ended', () => {
+                startSlideshow();
+            });
+        };
+    </script>
+
+</body>
+</html>
